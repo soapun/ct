@@ -1,0 +1,64 @@
+[
+    {
+        "id" : 0,
+        "name" : "крышка",
+        "square" : 36.17,
+        "connection_info" :
+        [
+            {"id" : 1, "square" : 12.25, "lmbda" : 240}
+        ],
+        "c" : 900,
+        "eps" : 0.05,
+        "Q_R" : 0
+    },
+    {
+        "id" : 1,
+        "name" : "корпус",
+        "square" : 99.41,
+        
+        "connection_info" : [
+            {"id" : 0, "square" : 12.25, "lmbda" : 240},
+            {"id" : 2, "square" : 12.25, "lmbda" : 240}
+        ],
+        "c" : 900,
+        "eps" : 0.05,
+        "Q_R" : "(20 + 3 * np.sin(t/4))"
+    },
+    {
+        "id" : 2,
+        "name" : "донышко",
+        "square" : 36.17,
+        
+        "connection_info" : [
+            {"id" : 1, "square" : 12.25, "lmbda" : 240},
+            {"id" : 3, "square" : 5.43, "lmbda" : 119}
+        ],
+        "c" : 900,
+        "eps" : 0.05,
+        "Q_R" : 0
+    },
+    {
+        "id" : 3,
+        "name" : "канал",
+        "square" : 12.37,
+        
+        "connection_info" : [
+            {"id" : 2, "square" : 5.43, "lmbda" : 119},
+            {"id" : 4, "square" : 5.43, "lmbda" : 10.5}
+        ],
+        "c" : 840,
+        "eps" : 0.01,
+        "Q_R" : 0
+    },
+    {
+        "id" : 4,
+        "name" : "кирпич",
+        "square" : 160,
+        "connection_info" : [
+            {"id" : 3, "square" : 5.43, "lmbda" : 10.5}
+        ],
+        "c" : 520,
+        "eps" : 0.1,
+        "Q_R" : 0
+    }
+]
