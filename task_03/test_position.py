@@ -31,7 +31,7 @@ def animate_planets(planets, R, title="some_title"):
     h = 5 * scale
     plt.style.use("dark_background")
     fig = plt.figure()
-    ax = plt.axes(xlim=(-w, w + scale), ylim=(-h, h))
+    ax = plt.axes(xlim=(-w, w), ylim=(-h, h))
     ax.set_facecolor((0, 0, 0.1))
     ax.set_title(title, color="#ffffff")
 
@@ -39,7 +39,6 @@ def animate_planets(planets, R, title="some_title"):
     legend_elements = [lines.Line2D([0], [0], color=i.color, lw=lw) for i in planets]
     ax.legend(legend_elements, [i.name for i in planets], loc='upper right')
     planet_circles = [planet_to_circle(planet) for planet in planets]
-
 
     def init():
         for pc in planet_circles:
@@ -63,7 +62,7 @@ def animate_planets(planets, R, title="some_title"):
 
 if __name__ == "__main__":
     scale = 10 ** 12
-    dt = 1.5 * 10**7
+    dt = 1.5 * 10**6
     n_iters = 1000
     G= 6.6743 * 10 ** -11
 
@@ -74,7 +73,15 @@ if __name__ == "__main__":
             1.9 * 10**30,
             "#f9d71c",
             "Sun",
-             0.3 * scale
+             0.2 * scale
+        ),
+        PlanetInfo(
+            arr([0.2, 0]) * scale,
+            arr([0.0, 24.13]) * 10 ** 3,
+            6.4171 * 10**23,
+            "#a1251b",
+            "Mars",
+            0.1 * scale
         ),
         PlanetInfo(
             arr([0.8, 0]) * scale,
@@ -98,7 +105,7 @@ if __name__ == "__main__":
             0.87 * 10**26,
             "#0000ff",
             "Neptune",
-             0.1 * scale
+            0.1 * scale
         ),
         PlanetInfo(
             arr([4.5, 0.0]) * scale,
@@ -118,7 +125,7 @@ if __name__ == "__main__":
         "odeint" : python_solvers.OdeintSolver(dt, n_iters, G),
         "python" : python_solvers.PythonVerletSolver(dt, n_iters, G),
         "cython" : cython_solver.CythonSolver(dt, n_iters, G),
-        "multiprocessing" : python_solvers.MultiprocessingVerletSolver(dt, n_iters, G),
+        "multiprocessing" : python_solvers.MultiprocessingVerletSolver(dt, n_iters, G, n_workers=len(planets)),
         "opencl" : opencl_solver.OpenCLSolver(dt, n_iters, G)
     }
     solutions = {}
@@ -130,9 +137,9 @@ if __name__ == "__main__":
     for solver in solutions:
         diff = (solutions['odeint'] - solutions[solver]) ** 2
         diff = np.sum(diff, axis=2)
-        diff = np.sum(diff, axis=1)
         diff = np.sqrt(diff)
+        diff = np.mean(diff, axis=1)
 
-        plt.plot(diff, label=solver, alpha=0.3)
+        plt.plot(diff, label=solver, alpha=0.7)
     plt.legend()
     plt.savefig("plots\\diff.png")

@@ -13,8 +13,7 @@ class OpenCLSolver:
         platform = cl.get_platforms()[0]
         device = platform.get_devices()[0]
         self.ctx = cl.Context([device])
-        self.queue = cl.CommandQueue(self.ctx)
-        
+        self.queue = cl.CommandQueue(self.ctx)        
 
     def solve(self, r_0, v_0, m_0):
         self.program = cl.Program(self.ctx, f"#define N_DIM {int(r_0.shape[1])}\n" + open("opencl_solver.cl").read()).build()
@@ -35,7 +34,7 @@ class OpenCLSolver:
         self.program.solve(
             self.queue, 
             (r_0.shape[0],), 
-            (self.group_size, ), 
+            None, 
             R_buf, V_buf, A_buf, m_buf, 
             np.double(self.G), np.double(self.dt), np.int32(r_0.shape[0]), 
             np.int32(r_0.shape[1]), np.int32(self.n_iters), localmem)
